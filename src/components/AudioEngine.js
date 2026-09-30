@@ -1,4 +1,3 @@
-// DISABLED — using audio from the video clips instead.
 // Web Audio API ambient soundscape generator
 // Generates a cinematic, subtle low-frequency rumble and alpine atmospheric hum
 // Pitch and filter modulate gently with user interaction without requiring any external audio files.
@@ -27,15 +26,15 @@ class CinematicAudioEngine {
     // Low pass filter
     this.filter = this.ctx.createBiquadFilter();
     this.filter.type = 'lowpass';
-    this.filter.frequency.setValueAtTime(1000, this.ctx.currentTime);
+    this.filter.frequency.setValueAtTime(140, this.ctx.currentTime);
     this.filter.Q.setValueAtTime(2, this.ctx.currentTime);
     this.filter.connect(this.masterGain);
 
     // Deep Sub Drone Oscillator (48Hz)
     this.droneOsc1 = this.ctx.createOscillator();
     this.droneOsc1.type = 'sine';
-    this.droneOsc1.frequency.setValueAtTime(220, this.ctx.currentTime);
-    
+    this.droneOsc1.frequency.setValueAtTime(48, this.ctx.currentTime);
+
     const gain1 = this.ctx.createGain();
     gain1.gain.setValueAtTime(0.35, this.ctx.currentTime);
     this.droneOsc1.connect(gain1);
@@ -44,7 +43,7 @@ class CinematicAudioEngine {
     // Harmonic Engine Tone (72Hz, sawtooth through heavy filter)
     this.droneOsc2 = this.ctx.createOscillator();
     this.droneOsc2.type = 'sawtooth';
-    this.droneOsc2.frequency.setValueAtTime(330, this.ctx.currentTime);
+    this.droneOsc2.frequency.setValueAtTime(72, this.ctx.currentTime);
 
     const gain2 = this.ctx.createGain();
     gain2.gain.setValueAtTime(0.08, this.ctx.currentTime);

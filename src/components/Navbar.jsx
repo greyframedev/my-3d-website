@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Volume2, VolumeX, Menu, X } from 'lucide-react';
-
+import { audioEngine } from './AudioEngine';
 
 export default function Navbar({ onOpenMenu, isMenuOpen }) {
   const [scrolled, setScrolled] = useState(false);
+  const [audioActive, setAudioActive] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,7 +19,10 @@ export default function Navbar({ onOpenMenu, isMenuOpen }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  
+  const toggleSound = () => {
+    const newState = audioEngine.toggle();
+    setAudioActive(newState);
+  };
 
   const scrollTo = (id) => {
     const el = document.getElementById(id);
@@ -154,7 +158,27 @@ export default function Navbar({ onOpenMenu, isMenuOpen }) {
         </div>
 
         {/* Audio Ambient Soundscape Toggle */}
-       
+        <button
+          onClick={toggleSound}
+          title="Toggle ambient engine telemetry audio"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.45rem',
+            padding: '0.35rem 0.65rem',
+            borderRadius: '2px',
+            border: '1px solid rgba(255, 255, 255, 0.12)',
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.62rem',
+            letterSpacing: '0.16em',
+            color: audioActive ? '#f5f5f7' : 'var(--text-muted)',
+            backgroundColor: audioActive ? 'rgba(255, 255, 255, 0.05)' : 'transparent',
+            transition: 'all 0.3s'
+          }}
+        >
+          {audioActive ? <Volume2 size={12} color="#c62828" /> : <VolumeX size={12} />}
+          <span className="sound-toggle-text">{audioActive ? 'SOUND ON' : 'SOUND'}</span>
+        </button>
 
         {/* Menu Drawer Toggle */}
         <button

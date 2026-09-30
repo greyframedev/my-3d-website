@@ -3,15 +3,11 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { audioEngine } from './AudioEngine';
 
-
-
-
 gsap.registerPlugin(ScrollTrigger);
 
 export default function CinematicVideoSection({ video1Ref, video2Ref }) {
   const containerRef = useRef(null);
   const stageRef = useRef(null);
-  
 
   // Section 01 elements
   const heroTextRef = useRef(null);
@@ -29,21 +25,9 @@ export default function CinematicVideoSection({ video1Ref, video2Ref }) {
     if (!v1 || !v2 || !containerRef.current || !stageRef.current) return;
 
     let ctx = gsap.context(() => {
+      // Ensure videos are paused and ready for scrubbing
       v1.pause();
-v2.pause();
-      // Videos stay paused until the user interacts.
-// The first click unlocks their original audio.
-const startVideoAudio = () => {
-  const activeVideo = v1.style.opacity !== '0' ? v1 : v2;
-
-  activeVideo.muted = false;
-  activeVideo.volume = 1;
-
-  activeVideo.play().catch(() => {});
-};
-
-window.addEventListener('click', startVideoAudio, { once: true });
-      
+      v2.pause();
 
       const v1Proxy = { time: 0 };
       const v2Proxy = { time: 0 };
@@ -121,7 +105,8 @@ window.addEventListener('click', startVideoAudio, { once: true });
           anticipatePin: 1,
           onUpdate: (self) => {
             // Modulate ambient soundscape with scroll velocity
-          
+            const speed = Math.abs(self.getVelocity()) / 1000;
+            audioEngine.modulate(speed);
           }
         }
       });
@@ -288,10 +273,9 @@ window.addEventListener('click', startVideoAudio, { once: true });
       );
 
       return () => {
-  v1.removeEventListener('seeked', onSeeked1);
-  v2.removeEventListener('seeked', onSeeked2);
-  window.removeEventListener('click', startVideoAudio);
-};
+        v1.removeEventListener('seeked', onSeeked1);
+        v2.removeEventListener('seeked', onSeeked2);
+      };
     }, containerRef);
 
     return () => ctx.revert();
@@ -329,6 +313,7 @@ window.addEventListener('click', startVideoAudio, { once: true });
           ref={video1Ref}
           src="/videos/clip1.mp4"
           poster="/stills/clip1-start.jpg"
+          muted
           playsInline
           preload="auto"
           className="video-element"
@@ -340,6 +325,7 @@ window.addEventListener('click', startVideoAudio, { once: true });
           ref={video2Ref}
           src="/videos/clip2.mp4"
           poster="/stills/clip2-headlight.jpg"
+          muted
           playsInline
           preload="auto"
           className="video-element"
