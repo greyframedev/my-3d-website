@@ -314,6 +314,7 @@ export default function CinematicVideoSection({ video1Ref, video2Ref }) {
           src="/videos/clip1.mp4"
           poster="/stills/clip1-start.jpg"
           muted
+          loop
           playsInline
           preload="auto"
           className="video-element"
@@ -326,6 +327,7 @@ export default function CinematicVideoSection({ video1Ref, video2Ref }) {
           src="/videos/clip2.mp4"
           poster="/stills/clip2-headlight.jpg"
           muted
+          loop
           playsInline
           preload="auto"
           className="video-element"
