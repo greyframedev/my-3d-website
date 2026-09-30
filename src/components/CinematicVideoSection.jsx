@@ -25,9 +25,26 @@ export default function CinematicVideoSection({ video1Ref, video2Ref }) {
     if (!v1 || !v2 || !containerRef.current || !stageRef.current) return;
 
     let ctx = gsap.context(() => {
-      // Ensure videos are paused and ready for scrubbing
-      v1.pause();
-      v2.pause();
+           // iOS Safari: videos must be muted and "unlocked" by play() before they can be scrubbed
+      const videos = [v1, v2];
+      videos.forEach((v) => {
+        v.muted = true;
+        v.setAttribute('muted', '');
+        v.setAttribute('playsinline', '');
+        v.addEventListener('loadedmetadata', () => ScrollTrigger.refresh());
+      });
+
+      const unlockVideos = () => {
+        videos.forEach((v) => {
+          const p = v.play();
+          if (p && p.then) {
+            p.then(() => v.pause()).catch(() => {});
+          }
+        });
+      };
+      unlockVideos(); // try right away
+      window.addEventListener('touchstart', unlockVideos, { once: true, passive: true });
+      window.addEventListener('click', unlockVideos, { once: true });
 
       const v1Proxy = { time: 0 };
       const v2Proxy = { time: 0 };
