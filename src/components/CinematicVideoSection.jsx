@@ -44,7 +44,7 @@ export default function CinematicVideoSection({ video1Ref, video2Ref }) {
       };
       unlockVideos(); // try right away
       window.addEventListener('touchstart', unlockVideos, { once: true, passive: true });
-      window.addEventListener('click', unlockVideos, { once: true });
+      window.addEventListener('click', unlockVideos, { once: true }); 
 
       const v1Proxy = { time: 0 };
       const v2Proxy = { time: 0 };
