@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import LoadingScreen from './components/LoadingScreen';
 import CinematicVideoSection from './components/CinematicVideoSection';
@@ -12,9 +12,6 @@ export default function App() {
   const [loaded, setLoaded] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const video1Ref = useRef(null);
-  const video2Ref = useRef(null);
-
   useEffect(() => {
     // Scroll restoration manual to prevent jump on reload
     if ('scrollRestoration' in window.history) {
@@ -26,21 +23,15 @@ export default function App() {
   return (
     <div style={{ backgroundColor: '#08080a', minHeight: '100vh', color: '#f5f5f7' }}>
       {/* Precision Loading Screen */}
-      {!loaded && (
-        <LoadingScreen
-          onLoaded={() => setLoaded(true)}
-          video1Ref={video1Ref}
-          video2Ref={video2Ref}
-        />
-      )}
+      {!loaded && <LoadingScreen onLoaded={() => setLoaded(true)} />}
 
       {/* Fixed Minimal Navigation */}
       <Navbar onOpenMenu={() => setMenuOpen(true)} isMenuOpen={menuOpen} />
 
       {/* Main Content Flow */}
       <main>
-        {/* Sections 01 & 02: Pinned Dual Scroll-Driven Cinematic Experience */}
-        <CinematicVideoSection video1Ref={video1Ref} video2Ref={video2Ref} />
+        {/* Sections 01 & 02: Dual Scroll-Driven Cinematic Experience (frame sequence) */}
+        <CinematicVideoSection />
 
         {/* Section 03: Design Architecture */}
         <DesignSection />

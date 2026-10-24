@@ -170,3 +170,7 @@ a {
   color: inherit;
   text-decoration: none;
 }
+@keyframes kenburns {
+  from { transform: scale(1) translate3d(0, 0, 0); }
+  to   { transform: scale(1.08) translate3d(-1%, -1%, 0); }
+}
